@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1776754962798",
+    "name": "Nikhil",
+    "age": 21,
+    "course": "MERN",
+    "createdAt": "2026-04-21T07:02:42.798Z"
+  },
+  {
+    "id": "1776755247850",
+    "name": "Nikhil",
+    "age": 21,
+    "course": "MERN",
+    "createdAt": "2026-04-21T07:07:27.850Z"
+  },
+  {
+    "id": "1776755486444",
+    "name": "Nikhil",
+    "age": 21,
+    "course": "MERN",
+    "createdAt": "2026-04-21T07:11:26.444Z"
+  },
+  {
+    "id": "1776761688959",
+    "name": "Nikhil",
+    "age": 21,
+    "course": "MERN",
+    "createdAt": "2026-04-21T08:54:48.959Z"
+  }
+]
