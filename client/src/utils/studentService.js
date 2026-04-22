@@ -100,13 +100,16 @@ export const studentServices = {
 
   // POST new student
   create: async (studentData) => {
+    const isFormData = studentData instanceof FormData;
+    const headers = getAuthHeaders();
+    if (!isFormData) {
+      headers['Content-Type'] = 'application/json';
+    }
+
     const response = await fetchWithRetry(`${API_BASE_URL}/students`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...getAuthHeaders(),
-      },
-      body: JSON.stringify({
+      headers,
+      body: isFormData ? studentData : JSON.stringify({
         ...studentData,
         age: Number(studentData.age)
       }),
@@ -118,15 +121,16 @@ export const studentServices = {
 
   // PUT/UPDATE student
   update: async (id, updatedData) => {
+    const isFormData = updatedData instanceof FormData;
+    const headers = getAuthHeaders();
+    if (!isFormData) {
+      headers['Content-Type'] = 'application/json';
+    }
+
     const response = await fetchWithRetry(`${API_BASE_URL}/students/${id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        ...getAuthHeaders(),
-      },
-      // Ensure we don't accidentally send the 'id' field to Mongo if it dislikes it.
-      // Send only valid schema fields.
-      body: JSON.stringify({
+      headers,
+      body: isFormData ? updatedData : JSON.stringify({
         name: updatedData.name,
         age: Number(updatedData.age),
         course: updatedData.course

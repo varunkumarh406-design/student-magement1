@@ -19,6 +19,7 @@ const StudentTable = ({ students, onDelete }) => {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-600 text-sm uppercase tracking-wider">
+              <th className="px-6 py-4 font-medium">Profile</th>
               <th className="px-6 py-4 font-medium">Name</th>
               <th className="px-6 py-4 font-medium">Age</th>
               <th className="px-6 py-4 font-medium">Course</th>
@@ -28,6 +29,15 @@ const StudentTable = ({ students, onDelete }) => {
           <tbody className="divide-y divide-slate-100">
             {students.map((student) => (
               <tr key={student.id} className="hover:bg-slate-50/50 transition-colors">
+                <td className="px-6 py-4">
+                  <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-100 flex items-center justify-center">
+                    {student.profileImage ? (
+                      <img src={student.profileImage} alt={student.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-slate-400 font-bold text-sm">{student.name.charAt(0)}</span>
+                    )}
+                  </div>
+                </td>
                 <td className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">
                   {student.name}
                 </td>

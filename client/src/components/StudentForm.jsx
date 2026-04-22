@@ -14,6 +14,8 @@ const StudentForm = ({ initialData, isEditMode }) => {
     age: initialData?.age || '',
     course: initialData?.course || '',
   });
+  const [profileImage, setProfileImage] = useState(null);
+  const [preview, setPreview] = useState(initialData?.profileImage || null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -21,11 +23,20 @@ const StudentForm = ({ initialData, isEditMode }) => {
     setLoading(true);
 
     try {
+      let dataToSend = formData;
+      if (profileImage) {
+        dataToSend = new FormData();
+        dataToSend.append('name', formData.name);
+        dataToSend.append('age', formData.age);
+        dataToSend.append('course', formData.course);
+        dataToSend.append('profileImage', profileImage);
+      }
+
       if (isEditMode) {
-        await studentServices.update(initialData.id, formData);
+        await studentServices.update(initialData.id, dataToSend);
         toast.success('Registry updated successfully');
       } else {
-        await studentServices.create(formData);
+        await studentServices.create(dataToSend);
         toast.success('New student enrolled successfully');
       }
       navigate('/students');
@@ -33,6 +44,14 @@ const StudentForm = ({ initialData, isEditMode }) => {
       toast.error(err.message || 'Operation failed');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfileImage(file);
+      setPreview(URL.createObjectURL(file));
     }
   };
 
@@ -79,6 +98,27 @@ const StudentForm = ({ initialData, isEditMode }) => {
 
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="space-y-6">
+            
+            {/* Profile Image Input */}
+            <div className="space-y-2 flex flex-col items-center">
+              <div className="relative group w-32 h-32 rounded-full overflow-hidden border-4 border-white dark:border-slate-800 shadow-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center cursor-pointer">
+                {preview ? (
+                  <img src={preview} alt="Profile preview" className="w-full h-full object-cover" />
+                ) : (
+                  <User className="w-12 h-12 text-slate-300 dark:text-slate-600" />
+                )}
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="text-white text-xs font-bold uppercase tracking-widest">Upload</span>
+                </div>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleImageChange} 
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
+                />
+              </div>
+              <label className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Profile Photo (Optional)</label>
+            </div>
             {/* Name Input */}
             <div className="space-y-2">
               <label className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 pl-1">Full Legal Name</label>
